@@ -9,6 +9,7 @@
 <sup>\*</sup>Corresponding authors: `liusc3@sustech.edu.cn`, `tangk3@sustech.edu.cn`
 
 [![Citation](https://img.shields.io/badge/Citation-BibTeX-b31b1b.svg)](#citation)
+[![Hugging Face Dataset](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/datasets/Antoniano1963G/AAD-Finaltest)
 [![Benchmarks](https://img.shields.io/badge/Benchmarks-5%20CO%20Domains-245A81.svg)](#benchmarks)
 [![Solvers](https://img.shields.io/badge/Solvers-42%20Frozen%20Implementations-26745A.svg)](#repository-structure)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](#quick-start)
@@ -45,6 +46,8 @@ This repository accompanies our empirical study ***How Good Are Coding Agents at
 ---
 
 ## Benchmarks
+
+Browse the 173 development instances and 336 held-out instances in the [AAD-Finaltest dataset on Hugging Face](https://huggingface.co/datasets/Antoniano1963G/AAD-Finaltest).
 
 All benchmarks enforce strict train–test separation: development instances guide agent iteration and candidate selection, while held-out instances evaluate the frozen submission independently. Click any problem below for its inputs, `TASK.md` protocols, launch prompts, and checkers.
 
