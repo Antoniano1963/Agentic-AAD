@@ -1,0 +1,6 @@
+{
+  "parent": "v061_objective_sched",
+  "variant": "Tipo 17 + packed-search fixes + objective-aware repack + scheduling + same-day merge cap 30",
+  "algorithm_changes": true,
+  "change": "Enables S46_SAME_DAY_MERGE=1 with cap 30 on top of v061."
+}

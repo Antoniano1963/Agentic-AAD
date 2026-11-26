@@ -1,0 +1,12 @@
+{
+  "batches": 3,
+  "candidate_src": "candidates/vB2",
+  "checker_concurrency": 8,
+  "extra_solver_args": "--cycle 1.0",
+  "instances": "C_01..C_15",
+  "mem_limit_bytes": 16000000000,
+  "n_repeats": 3,
+  "seed_base": 20240,
+  "time_limit_solver": 150.0,
+  "wall_cap": 895.0
+}

@@ -1,0 +1,9 @@
+{
+  "round": 6,
+  "note": "v6: v8 + stronger feasOnly (resource-stress/random destroys, k<=12, cooled SA until feasible)",
+  "build": "g++ -O2 -std=c++17 -pthread -o solver solver.cpp",
+  "solve_args": "--time-budget 870 --threads 4 --samples 224",
+  "hard_timeout_sec": 900,
+  "memory_limit_kb": 16000000,
+  "seeds": "seed(i,rep)=7919*i+rep"
+}

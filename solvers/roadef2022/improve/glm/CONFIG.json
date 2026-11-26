@@ -1,0 +1,5 @@
+{
+  "parent": "v03_deadline",
+  "change": "Persistent Python runtime; fresh identical model for every request",
+  "algorithm_changes": false
+}

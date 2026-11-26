@@ -1,0 +1,314 @@
+Improve the original ROADEF2018 champion glass-cutting solver. Minimize equal-instance mean waste percent. CLI: -p instance_prefix -g global_param.csv -o solution.csv -t seconds -i json_log -l text_log. Preserve official solution format. All algorithm source components may change. Training B1-B15, 3 independent runs each; nominal900s including parsing/output, internal870s;8 logical CPUs (4 physical cores with SMT) and48,000,000,000 bytes across all descendants per solve. Original seed option is unused; no independent-randomness claim for unchanged baseline.
+The program is a Python literal bundle FILES mapping relative C++ source filenames to raw strings, plus PARAMETERS={'extra_args': []}. Return SEARCH/REPLACE diffs to this bundle. No executable Python, imports or nonliteral assignments. You may edit/add algorithm .cpp/.hpp/.h files. Preserve delimiters. The harness compiles all .cpp. Extra CLI args may tune algorithms but not replace input/output/seed/time arguments.
+Each full evaluation is45 solves:15 concurrent instances per batch,3 sequential batches, no overlap between evaluations. The entire candidate is frozen. No test data, other agent outputs, hard-coded instance solutions, external solver calls, network use by solver, or access to API credentials. Use only provided evaluation feedback; no extra experiments.
+Exactly50 completed full evaluations including initial baseline; compilation failures are logged separately and do not use a full-evaluation slot. Runtime failures and invalid outputs count, with all45 attempts retained. combined_score=1000*eligible_solve_count+quality. Thus one additional valid/resource-eligible solve always dominates quality; quality=0 until all45 are eligible. When all45 are eligible, quality=100-mean_waste_percent. Higher combined_score is better. Per-instance objectives and validity are provided even for partial failures, but partial-subset means are never full scores. Respect CPU/memory limits. Evaluation enforces CPU affinity and a900s group watchdog, and passive external account monitoring records resource use; no cgroup hard memory guarantee.
+OFFICIAL PROBLEM SPECIFICATION (reference material):
+Challenge ROADEF / EURO 2018
+Cutting Optimization
+Problem Description
+Lydia Tlilane and Quentin Viaud
+Saint-Gobain, Datalab
+May 18, 2018
+Contents
+1 Introduction 2
+2 Problem description 3
+2.1 Inputs, deﬁnitions and notations . . . . . . . . . . . . . . . . . . 3
+2.2 Problem objective and constraints . . . . . . . . . . . . . . . . . 6
+3 Example 9
+1
+1 Introduction
+The Saint-Gobain Group designs, manufactures and distributes materials and
+solutions which are key ingredients in the well-being of each of us and the future
+of all. They can be found everywhere in our living places and our daily life:
+buildings, transportation, infrastructure and in many industrial applications.
+They provide comfort, performance and safety while addressing the challenges
+of sustainable construction, resource eﬃciency and climate change.
+Saint-Gobain Glass France (SGGF), part of the Saint-Gobain Group, is one
+of the world’s leading ﬂat glass manufacturers. It specialises in ﬂoat glass man-
+ufacture and magnetron coated glass producing an array of glass types with
+diﬀerent functions: transparency, thermal and acoustic insulation, safety, solar
+control, decoration, self-cleaning function, etc. The products are intended for a
+wide variety of domestic and commercial applications including housing equip-
+ment (windows, bay windows, interior design), facade, urban development and
+the realization of major projects.
+Flat glass is mostly produced through a process called the ” ﬂoat process ”.
+In this process, various powders (sand, soda, . . . ) are melted together inside a
+large furnace in order to create a liquid glass ribbon which is spread over a tin
+bath and then cooled down to solidify. The obtained inﬁnite ribbon is then cut
+into large glass sheets (typically 3m x 6m) called jumbo’s. Afterwards, these
+jumbo’s are stacked on stillages to be sent to so-called transformers. In general,
+these jumbo’s are not used such as but are most of the time recut into smaller
+rectangular pieces adapted to the needs of the customers. These smaller pieces
+of glass are cut according to a cutting pattern which satisﬁes a certain amount of
+constraints link to the customer (order, . . . ) or to the physics of glass (guillotine
+which means that a piece of glass can only be cut from one edge to the other
+through the propagation of a crack along a straight line). A cutting plan can be
+seen as a paving of the jumbo by rectangular pieces of various sizes positioned in
+such a way that the geometrical glass losses (remaining glass surface too small
+to cut a new piece) are as low as possible. Actually, the jumbo’s are not perfect
+in terms of quality and may also contain defects inherent to the ﬂoat process. At
+the exit of this process, a scanner allows, for each jumbo, to establish the map of
+defects (position, criticity, . . . ). These defects can be considered as punctual in
+our problem. This information is stored in a database which contains the map
+of defects of each jumbo sold to a transformer. During the cutting process, when
+a defect is positioned in a cut glass piece, it is, most of the time, rejected as a
+quality loss. In this case, it is necessary to recut a glass piece of the same size
+from the jumbo. This reduces signiﬁcantly the productivity of the line. To avoid
+this loss, one option is to adapt the cutting plan to the defect map measured
+at the exit of the ﬂoat process and position the defects inside the ”natural”
+geometrical glass losses of the cutting plan instead. The goal of this challenge
+is, for a given sequence of jumbo’s and their attached defect maps on one side,
+and a given batch of glass pieces to cut, to propose an algorithm allowing to
+reduce as much as possible the glass losses of the cutting process. This means
+to minimize the number and the dimensions of the cut size containing a defect
+2
+and to minimize the size of the geometrical glass losses.
+2 Problem description
+This section describes the input data, problem objective, constraints used in
+this challenge.
+2.1 Inputs, deﬁnitions and notations
+Item: an item is a glass piece to cut. An item i is characterized by a pair
+(wi,h i) representing its width and height.
+Stack: a stack s = (i1,i 2,...,i j) is an ordered sequence of items such that
+i1 <cut i2 <cut ... < cut ij, with <cut the partial order operator. For
+two items i1 and i2, i1 <cut i2 means that item i1 has to be cut before
+itemi2. This order comes from some scheduling constraints related to the
+deliveries and item processing.
+Batch: a batchI is the set of items to cut. It corresponds to a customer order.
+Using the stack notation, the item set I can be partitioned into n stacks,
+I = ⋃n
+k=1sk.
+Bin: a bin is a jumbo obtained at the end of the ﬂoat process. A bin b is
+characterized by its widthWb, its heightHb and its defect setDb. Jumbo’s
+are stacked in the factory thus the bin set B is considered as ordered.
+Assume that bins are indexed from {0,..., |B|}, for two bins b1 and b2,
+b1 <cut b2 means that bin b1 is used to cut some items before starting
+using bin b2. This implies that b1 is removed from the bin stack before
+starting using bin b2. Bins are assumed in a quantity large enough to
+cut all items and have the same size. The bin size is standardised. The
+diﬀerence between them is related to their defect set.
+Defect: a defect d is a tuple (xd,y d,w d,h d) with xd is its coordinates on the
+x-axis,yd is its coordinates on the y-axis. wd (resp. hd) is its width (resp.
+height).
+Guillotine cut: a guillotine cut on a plate is a cut from one edge of the plate
+to the opposite edge, parallel to the remaining edge. In other words, the
+cut is guillotine if when applied to a rectangular plate it produces two new
+rectangular plates. This type of cut is mandatory to cut glass, it produces
+cracks otherwise. Figure 1 depicts guillotine and non guillotine patterns.
+3
+i1
+i2
+i3
+i4
+i5
+(a)
+i1 i2
+i3
+i4
+i5
+(b)
+Figure 1: Non guillotine (a) and guillotine (b) patterns. There is no item order.
+Cutting pattern: a cutting pattern for a given bin is a two-dimensional plan
+giving indication on how to cut items and the defect location for that bin.
+In the problem discussed here, a cutting pattern is always composed of
+guillotine cuts. Figure 2 depicts a guillotine pattern for a bin with one
+defect and the way to perform cuts.
+1-cut
+2-cut
+3-cut 3-cut
+i1
+i2 i3
+(a)
+2-cut
+3-cut 3-cut
+i1
+i2 i3
+(b)
+3-cut 3-cut
+i1
+i2 i3
+(c)
+i1
+i2 i3
+(d)
+Figure 2: An initial pattern (a) and its variants by performing cuts (b-c-d).
+There is no item order.
+W aste: a waste is a rectangular part of a bin which is not an item accord-
+ing to a cutting pattern. A waste occurs during the cutting process and
+corresponds to a raw material loss. Dashed lines in Figure 2 are losses.
+α-cut: a guillotine cut of depth α. Due to technical limitation, the number of
+4
+guillotine cuts which can be performed to cut an item is often limited by a
+certain number. For instance, a cutting pattern is said to be 2-stage (resp.
+3-stage) when an item has to be cut in at most 2 (resp. 3) guillotine cuts.
+The notation α-cut is used to note the number of cuts performed so far.
+The cutting pattern in Figure 2 is 3-stage, it requires two cuts to extract
+item i1, three cuts to extract items i2 and i3.
+T ree representation of a cutting pattern: a cutting pattern can be repre-
+sented by a tree. This is possible since a guillotine cut always divides a
+rectangular plate in two smaller rectangular plates. Its root corresponds
+to the initial plate, its leafs are either the items or the wastes or the resid-
+ual. The children of a given node except the leafs are the one obtained
+after performing a cut at a depth level α from the root node. The tree
+representation of pattern in Figure 2 is given in Figure 3.
+i1
+i2 i3
+i1
+i2 i3
+i1 i2 i3
+i2 i3
+Figure 3: Tree representation of the cutting pattern from Figure 2
+5
+2.2 Problem objective and constraints
+The problem objective is to reduce the glass loss for a given ordered bin setB and
+a given item batch to cutI. This problem is related to the two-dimensional bin-
+packing problem but has extra constraints from industrial requirements. The
+problem consists in providing two-dimensional cutting patterns that allow to cut
+all items of the batchI using the available bins fromB by satisfying some given
+constraints like avoiding defects, respecting the partial order on item stacks and
+bins and satisfying some physical constraints like guillotine cuts. Therefore, a
+solution can be represented by a set of cutting patterns. The constraints of the
+problem are deﬁned hereinafter but the objective function is described ﬁrst.
+Formally, the objective function is to minimize the geometrical loss of the
+cutting patterns applied on bins. Since glass leftover can be reused after cutting,
+one has to take them into account to compute the loss area. To simplify the
+residual management, only the residual in the last cutting pattern is considered.
+It is represented by the waste at right of the last 1-cut performed in the last
+cutting pattern in a solution. The residual of the pattern in Figure 2 corresponds
+to the dashed part extract after the 1-cut. LetP ={p1,p 2,...,p m} be a feasible
+solution, i.e. a set of m cutting patterns satisfying all the constraints of the
+problem. The loss is measured by summing up the loss area in cutting patterns
+{p1,p 2,...,p m−1}. For the loss in the last cutting pattern pm, only its non
+residual part is taken into account. Let rm be the residual part of the pattern
+pm. The objective function is :
+min HWm−Hr m−
+∑
+i∈I
+wihi (1)
+Glass cutting is subject to some constraints that are related to the items,
+the bins, the guillotine process, etc. A constraint can be physical, related to the
+cutting of glass, or organizational to satisfy the orders. An overview of these
+constraints is presented below. The solutions provided in this challenge must
+satisfy all these hard constraints. The constraints related to item and bins are
+the following:
+• Only rotation by 90◦of items is allowed, i.e. the items can be set horizon-
+tally or vertically on cutting patterns.
+• All items in the batch I must be cut, i.e. a solution must contain the
+entire batch.
+• Item overproduction is not allowed, i.e. only the items inI should be cut
+and a solution with extra items in cutting patterns is not valid.
+• Each item belongs to the stack given in input and modifying the stack of
+items is not allowed.
+• The given sequence of items within stacks in cutting patterns has to be
+satisﬁed among cutting patterns. For this, it is important to understand
+6
+how to rebuild the sequence of items from a cutting pattern. In the cutting
+pattern represented in Figure 2, the number on each item represents the
+output order of this item after snapping guillotine lines in depth ﬁrst. This
+means that item i1 is cut ﬁrst, then item i2, ﬁnally item i3. Each item ij′
+is cut before item ij′+1 for all j′ ={1, 2}. This sequence of items can be
+found with a depth-ﬁrst-search in the corresponding tree representation in
+Figure 3. Moreover, since the order of items are inside stacks only, there
+is no order to ensure between items of diﬀerent stacks.
+• The bins are always horizontal (W >H) and their rotation is not allowed.
+• The bins must be used in the given order, i.e for a feasible set of cutting
+patternsP ={p1,p 2,...,p m}, the bins used to create patternsp1,p 2,...,p m
+must correspond exactly to bins b1,b 2,...,b m in that order.
+The constraints related on how to build a cutting pattern are given below:
+• Overlapping of items between them is not allowed.
+• Overlapping of an item with one or more defects is not allowed in cutting
+pattern, i.e. an item has to be defect-free.
+• It is forbidden to cut through a defect.
+• Cutting patterns are two-dimensional and be obtained using guillotine
+cuts only. The number of cuts allowed to obtain an item is at most 3
+(1,2,3-cuts only). However, it is possible to perform at most one 4-cut
+in a sub-plate obtained after a 3-cut. This means that only one 4-cut is
+allowed only if no additional cut is required to get two items or one item
+and a waste. This is known in the literature as allowing trimming. An
+example is given in Figure 4.
+7
+1-cut
+2-cut
+3-cut 3-cut
+4-cut
+i1
+i2 i3
+i4
+(a)
+1-cut
+2-cut
+3-cut 3-cut
+4-cut
+4-cut
+i1
+i2
+i3
+i4
+i5
+i6
+(b)
+1-cut
+2-cut
+3-cut 3-cut
+4-cut
+4-cut
+i1
+i2 i3
+i4
+i5
+(c)
+Figure 4: Example of valid cutting patterns (a-b) and a forbidden pattern (c). In
+pattern (a), the 4-cut is used only to remove the waste to get itemi4. In pattern
+(b), two 4-cuts are used to cut items i2,i 3 and itemsi5,i 6. This conﬁguration is
+allowed since a 4-cut is performed in each plate obtained after a 3-cut. In pattern
+(c), two 4-cuts are performed to cut items i4,i 5 and a waste. This conﬁguration
+is forbidden since two 4-cuts are performed in the same plate obtained after a
+3-cut.
+• It is possible to cut an item in less than 3 cuts (see itemi1 in Figure 4-(a)).
+• 1-cuts are always vertical as shown in Figure 4.
+• The minimal width between two consecutive 1-cuts is 100, except for
+wastes.
+• The maximal width between two consecutive 1-cuts is 3500, except for the
+residual.
+• Due to the minimal and maximal widths between two consecutive 1-cuts
+and from technical limitation, a cutting pattern must contain at least one
+1-cut.
+• The minimal height between two consecutive 2-cuts is 100, except for
+wastes.
+8
+• The width between two consecutive 1-cuts does not correspond necessarily
+to the size of an item. Figure 5 illustrates bounds between two consecutive
+1-cuts or 2-cuts.
+Figure 5: Bounds on distance between two consecutive 1-cuts and 2-cuts.
+Bounds are measured between two consecutive 1-cuts (or 2-cuts) and/or their
+distances to edges of the bin.
+• Minimal size of every waste area is (20 , 20).
+3 Example
+In this section, a small problem instance is considered and its solution is ex-
+plained. Let the following problem instance with item set I to cut composed
+of the following stacks: I = s0∪s1∪s2∪s3 where s0 ={i0,i 1,...,i 9},s1 =
+{i10,i 11,...,i 15}, s2 ={i16,i 17,...,i 25} and s3 ={i26,i 27}.
+Figure 6 depicts a feasible solution to this instance. Two patterns p1 andp2
+are used for bins b1 and b2. The bin size is (6000,3210). The used notation in
+Figure 6 for each item is:
+id: corresponds to iid (identiﬁer of the item).
+w: width of iid, i.e. size of iid on x-axis of the cutting pattern.
+h: height of iid, i.e. size of iid on y-axis of the cutting pattern.
+stk: corresponds to stack id{s0,s 1,s 2,s 3} in which the item belong Sstk∋iid.
+9
+seq: corresponds to the position of the item in its stack (from 1 to |s0| for
+instance).
+From Figure 6, the items are cut in the following order (by snapping guil-
+lotine lines in depth ﬁrst): i26, i27, i0, i16, i17, i18, i10, i19, i11, i12, i13, i14, i1,
+i20,i2,i21,i22,i23,i24,i3,i4,i5,i6,i15,i25,i7,i8,i9. It easy to check that the
+item are cut according to their position in their respective stacks. The order on
+bins is ensured since p1 is applied on bin b1 andp2 on binb2. Since the solution
+only requires two patterns, p2 is the last one. The sum of width of 1-cuts in p2
+is 2995, thus its residual r is 3005.
+10
+(a)
+(b)
+Figure 6: Example of a solution with two cutting patterns p1 (a) and p2 (b) for
+binsb1 andb2. Red points are defects. Grey part represents the loss area, dark
+one is the residual area.
+11

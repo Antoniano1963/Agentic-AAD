@@ -1,0 +1,18 @@
+{
+ "_comment": "Generalized default table for UNSEEN instances (X1-X15). Baked into bin/solver_v015 built-in default; equivalently passable via -a to solver_v013/v015. 7 lines = 7 threads <= 8 CPU protocol. Every line has >=2 instance wins in the final adopted per-instance tables (algos_map_v025) as evidence.",
+ "default": "MBA* c 0 f 1.33;MBA* c 0 f 1.5;MBA* c 1 f 1.4;MBA* c 1 f 1.5;MBA* c 11 f 1.5;MBA* c 0 f 1.5 j 4 e 0.01;DPA* s -1",
+ "line_evidence": {
+  "MBA* c 0 f 1.33": "primary winner on B1, B12; champion-era core line",
+  "MBA* c 0 f 1.5": "primary winner on B4, B15",
+  "MBA* c 1 f 1.4": "primary winner on B6, B9",
+  "MBA* c 1 f 1.5": "primary winner on B3, B10, B11, B14 (modal primary, 4/15)",
+  "MBA* c 11 f 1.5": "exponent criterion wp/m^0.5; won on B3, B13 (the only second-order winning dimension)",
+  "MBA* c 0 f 1.5 j 4 e 0.01": "jitter lottery ticket; j4/e0.01 is the modal jitter config (present in B1/B4/B15 tables)",
+  "DPA* s -1": "universal sentinel, 15/15 tables; runs exact DP for free when stack_number<=2 (B5's main solver), inert no-op otherwise"
+ },
+ "rejected_candidates": {
+  "BS c 0 f 1.5": "0 wins in 12 head-to-head observations outside B12's timing niche",
+  "MBA* c 4/13/14 f 1.5": "1 win each (B7/B14/B10); slots exhausted by higher-frequency lines",
+  "f 1.1/1.2/2.0 spread": "off the modal winning band (11/14 MBA*-led primaries at f in [1.33,1.5])"
+ }
+}

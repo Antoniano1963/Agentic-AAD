@@ -1,0 +1,233 @@
+[
+  {
+    "instance": "fqm5087",
+    "n": 5087,
+    "path": "data/fqm5087.tsp",
+    "sha256": "3b5c2c4c45898676a2d9bade837eabdb10295a121b1631b12a1e4281b048c04b",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "fea5557",
+    "n": 5557,
+    "path": "data/fea5557.tsp",
+    "sha256": "e5896d8e92a58fe9508a3c254c9af33d87cd98cd57ed4c016cbe088d7261ca7c",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "rl5915",
+    "n": 5915,
+    "path": "data/rl5915.tsp",
+    "sha256": "db105b85ea8e77910adfb8a4d1e495459a8aeb35d08510b44d10b8d0feb62751",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "rl5934",
+    "n": 5934,
+    "path": "data/rl5934.tsp",
+    "sha256": "c1ff1ac40da63b1f68dea8b46260e7faf92ce0efa56bf889b6834a3cf59931e7",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "tz6117",
+    "n": 6117,
+    "path": "data/tz6117.tsp",
+    "sha256": "e87f457d85002f659c314e6a9e40d480fc71a319228fe30311d762309f012333",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "xsc6880",
+    "n": 6880,
+    "path": "data/xsc6880.tsp",
+    "sha256": "e6ca3d7f871524c9ea8bca2551b0dfae7d6bc06ffd1e317fde566a8a126d4611",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "eg7146",
+    "n": 7146,
+    "path": "data/eg7146.tsp",
+    "sha256": "dc1801102b427ccfc53bce72b4ad63da04f7a9717f81dfcef0e38e8c87fe3b86",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "bnd7168",
+    "n": 7168,
+    "path": "data/bnd7168.tsp",
+    "sha256": "c4b6d451d47a1ac1059c8863b96d55431854fa1fe93a96177abcc4b79cc64970",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "lap7454",
+    "n": 7454,
+    "path": "data/lap7454.tsp",
+    "sha256": "8553159d4088771424f99f10ae4b770e9d497de18041a4fe310b0fcf54590f8f",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "ym7663",
+    "n": 7663,
+    "path": "data/ym7663.tsp",
+    "sha256": "fdd6e776a9c3e23197b941d0c4cbb7eeda2ecfcc3a3441d5518d62e2621d4dbd",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "pm8079",
+    "n": 8079,
+    "path": "data/pm8079.tsp",
+    "sha256": "2b9fa1d92cc80891dd01e0f4ba8431a8c57cd54ceada84f2442b8df6953125eb",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "ida8197",
+    "n": 8197,
+    "path": "data/ida8197.tsp",
+    "sha256": "98ad86892af2d213d3e5381435e6cf24a8d0964d7768c5d0d1a960ea41168f09",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "ei8246",
+    "n": 8246,
+    "path": "data/ei8246.tsp",
+    "sha256": "e00e324d722ae6c94f1ca332a23a0b372720a9a2ce0c873aef31b90e9954e96a",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "ar9152",
+    "n": 9152,
+    "path": "data/ar9152.tsp",
+    "sha256": "db948e331aadefc2ac93711296e3617cb02e8e931241dbe81153c555758eea1c",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "dga9698",
+    "n": 9698,
+    "path": "data/dga9698.tsp",
+    "sha256": "cfafd36bcb51ea102da146f53019fee75ea2060e7fbcd1dd8d833987659da228",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "ja9847",
+    "n": 9847,
+    "path": "data/ja9847.tsp",
+    "sha256": "36af2e7ab2d0b3827ecd42a6b3b9bb0181591668f92383a7e6f33a504ed89489",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "gr9882",
+    "n": 9882,
+    "path": "data/gr9882.tsp",
+    "sha256": "03e889d48de9787bd77d336ad4d29b5d9c767c8131ddf9794f31d5b3330bd9de",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "kz9976",
+    "n": 9976,
+    "path": "data/kz9976.tsp",
+    "sha256": "5081ba1c18affcf41819a7f9aa32c4595420ebeaf1c49f328d8668c919645b1c",
+    "budget_seconds": 900
+  },
+  {
+    "instance": "xmc10150",
+    "n": 10150,
+    "path": "data/xmc10150.tsp",
+    "sha256": "ae2ff5f80ef2e4acb2be49b19c4c3d4b31049a0355be1821daaa1ddec1cc728d",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "fi10639",
+    "n": 10639,
+    "path": "data/fi10639.tsp",
+    "sha256": "746d00ee5e252281587ed5e9182a5d2fdfa06c78d20c9a5f593b928bc8b3110c",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "rl11849",
+    "n": 11849,
+    "path": "data/rl11849.tsp",
+    "sha256": "afe81041b26cd4414bd4a3de0f8a27a7520894578222e5ef805981f8582e15bf",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "xvb13584",
+    "n": 13584,
+    "path": "data/xvb13584.tsp",
+    "sha256": "b01e28c2fde652c9cb6540274d3187c7416fbacbaa5e57843dc3031b29d6d4a5",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "brd14051",
+    "n": 14051,
+    "path": "data/brd14051.tsp",
+    "sha256": "abfe489b9e061ce50c58db3e4f6be361a6972bf930bdfa05f143b488fd0f2704",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "mo14185",
+    "n": 14185,
+    "path": "data/mo14185.tsp",
+    "sha256": "56a167b9762332ff6dbedb6852ba7adb8f4fed2ba94d6a28d325da50ccf8c8d3",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "xrb14233",
+    "n": 14233,
+    "path": "data/xrb14233.tsp",
+    "sha256": "30baa437f4a07480f07bad63963a69431e845628c899b18772a5d1c6f7a30270",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "ho14473",
+    "n": 14473,
+    "path": "data/ho14473.tsp",
+    "sha256": "655a382c5889d014e1c84f74e17d7ee3cc5a706b4e20f571995622b1e84787e2",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "d15112",
+    "n": 15112,
+    "path": "data/d15112.tsp",
+    "sha256": "c210a181e58ef0934c4c941f90e0a23c56077adc5ad3f6aa20d0d602607413fc",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "it16862",
+    "n": 16862,
+    "path": "data/it16862.tsp",
+    "sha256": "3e61df79ad7f9945dfd5cfd0522380b2bc5a5c7ad030e5bcaf1e13873181fe6d",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "xia16928",
+    "n": 16928,
+    "path": "data/xia16928.tsp",
+    "sha256": "c1731fca84410d3ca4270f26655e4118d77dc55d1a32f3f4b4eb3c57d8cd24d9",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "pjh17845",
+    "n": 17845,
+    "path": "data/pjh17845.tsp",
+    "sha256": "f4a32d22b814f1c34c77f63742b920fc7db4390ad19c8df32ae4b12a223fc8f2",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "d18512",
+    "n": 18512,
+    "path": "data/d18512.tsp",
+    "sha256": "63abd6068f661b87e6f8ea4173f66de2840b342c4ee764675f738095f50a4d90",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "frh19289",
+    "n": 19289,
+    "path": "data/frh19289.tsp",
+    "sha256": "27df6a1d362ab5de8fba57726b3cccad66dd85e3450df4a0713e5104bb7a7ae2",
+    "budget_seconds": 1200
+  },
+  {
+    "instance": "fnc19402",
+    "n": 19402,
+    "path": "data/fnc19402.tsp",
+    "sha256": "b59801b795124d791621b0e88afd2ed6c6d88b11fd33653de81f8e504a79efce",
+    "budget_seconds": 1200
+  }
+]

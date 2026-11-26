@@ -1,0 +1,272 @@
+Improve the original J49 ALNS ROADEF2020 maintenance scheduler without external optimization solvers. CLI: -p instance.json -o solution.txt -t seconds -s seed. Training C01-C15,3 runs with seeds1111,2222,3333, nominal900s including parsing/output, internal850s;4 logical CPUs (2 physical cores with SMT),16,000,000,000 bytes across all descendants. Preserve official intervention start-time solution format. First achieve feasible solutions, then minimize the official risk objective. All algorithm components may change, including parsing, initialization, operators and search policy. The bundled nlohmann json.hpp dependency is copied unchanged if omitted from FILES; you may replace the parser or include your own header in FILES.
+The program is a Python literal bundle FILES mapping relative C++ source filenames to raw strings, plus PARAMETERS={'extra_args': []}. Return SEARCH/REPLACE diffs to this bundle. No executable Python, imports or nonliteral assignments. You may edit/add algorithm .cpp/.hpp/.h files. Preserve delimiters. The harness compiles all .cpp. Extra CLI args may tune algorithms but not replace input/output/seed/time arguments.
+Each full evaluation is45 solves:15 concurrent instances per batch,3 sequential batches, no overlap between evaluations. The entire candidate is frozen. No test data, other agent outputs, hard-coded instance solutions, external solver calls, network use by solver, or access to API credentials. Use only provided evaluation feedback; no extra experiments.
+Exactly50 completed full evaluations including initial baseline; compilation failures are logged separately and do not use a full-evaluation slot. Runtime failures and invalid outputs count, with all45 attempts retained. combined_score=1000*eligible_solve_count+quality. Thus one additional valid/resource-eligible solve always dominates quality; quality=0 until all45 are eligible. When all45 are eligible, quality=100*10000/(10000+mean_official_objective). Higher combined_score is better. Per-instance objectives and validity are provided even for partial failures, but partial-subset means are never full scores. Respect CPU/memory limits. Evaluation enforces CPU affinity and a900s group watchdog, and passive external account monitoring records resource use; no cgroup hard memory guarantee.
+OFFICIAL PROBLEM SPECIFICATION (reference material):
+ROADEF Challenge RTE: Grid operation-based outage
+maintenance planning
+Manuel Ruiz, Pascal Tournebise and Patrick Panciatici
+RTE
+March 27, 2020
+Contents
+1 Introduction 2
+2 Inputs and notations 3
+2.1 Planning horizon . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.2 Resources . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.3 Interventions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.4 Risk . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+3 Solution 4
+4 Constraints 5
+4.1 Schedule constraints . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+4.1.1 Non-preemptive scheduling . . . . . . . . . . . . . . . . . . . . 5
+4.1.2 Interventions are scheduled once . . . . . . . . . . . . . . . . . 5
+4.1.3 No work left . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+4.2 Resource constraints . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+4.3 Disjonctive constraints . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+5 Objective 7
+5.1 Mean cost . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+5.2 Expected excess . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+5.2.1 Reminder . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+5.2.2 Denition . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+5.3 Planning ranking . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+1
+1 Introduction
+Réseau de Transport d'Électricité (Electricity Transmission Network), usually known
+as RTE, is the electricity transmission system operator of France. It is responsible for
+the operation, maintenance and development of the French high-voltage transmis-
+sion system, which with approximately 100,000 kilometres, is the largest of Europe.
+Guaranteeing both electricity delivery and supply is one of the most important
+mission of a transmission system operator such as RTE. But such an objective can
+be carried out only if the grid is correctly maintained. In particular, some mainte-
+nance operations on the overhead power lines are live-line works while others require
+to shut the power down. When this happens, both electricity delivery and supply
+have to be guaranteed, meaning that maintenance operations have to be planned
+carefully. When there is not any maintenance operation, the network is resilient
+enough to endure an unexpected contingency. However, if several breakdowns oc-
+cur, the grid might face major blackouts. In this context, planned outages due to
+maintenance work have to be scheduled with extreme caution.
+Alongside with this very operational aspect, anticipating what maintenance plan-
+nings will look like in the years to come helps in designing ecient network design
+strategies. If future maintenance operations appear to be unfeasible due to an ag-
+ing network, new generation and consumption plans or even the energy transition,
+RTE has to anticipate these changes and adapt its current maintenance practices
+and design strategies as of today. In particular, the increasing integration of renew-
+able energies in the electricity network leads to important changes in its operation,
+resulting in new grid constraints. Maintenance interventions requiring a planned
+outage may not be feasible with a renewable-driven grid operation.
+Figure 1: A maintenance team performing an intervention on overhead power lines
+To tackle this issue, RTE decided to implement a three-step approach. First,
+risk values corresponding to dierent future scenarios are computed. Second, these
+computed values are included in several optimisation approaches in order to nd a
+good schedule. Eventually, a third step validates the obtained planning.
+This challenge focuses on the second step of this approach: given the risk values,
+the goal is to nd an optimal planning regarding a risk-based objective. Moreover,
+this planning must be consistent with all job-related restrictions such as resource
+constraints.
+2
+2 Inputs and notations
+This section describes the problem settings, inputs and notations.
+2.1 Planning horizon
+The schedule has to be established over a one-year period. Nevertheless, the time
+step of the schedule can either be a day or a week, depending on the needed precision.
+Formally, the number of time steps is denoted by T ∈ N and the discrete time
+horizon is H ={1,...,T}. For instance T = 365 for a day by day schedule and
+T = 53 for a week by week one.
+2.2 Resources
+To carry out the dierent tasks (or interventions), some workforce is necessary, and
+is split in teams (or resources) with dierent sizes. Each team has dierent specic
+skills and can potentially be required on any intervention. C denotes the set of
+resources.
+Maximum resources ( uc
+t) The available resources are always limited and there-
+fore there is a maximum value for each resource that cannot be exceeded. Moreover,
+the available workforce varies over time. So for every resource c∈C and every time
+step t∈H, uc
+t denotes the upper limit that cannot be exceeded.
+Minimum resources ( lc
+t ) For operational reasons, there is also a lower bound
+on the resources consumption. In order to prevent workforce from not being used
+at all, there exists thresholds indicating the minimum required value of consumed
+resources. Such a threshold is denoted by lc
+t and represents the minimum value for
+resource c∈C at time t∈H.
+2.3 Interventions
+Interventions are tasks that have to be planned in the coming year. They are not
+equal in terms of duration nor in terms of resource requirement. The set of inter-
+ventions is denoted by I.
+Time Duration ( ∆i,t) Because of days o (weekends, public holidays), the du-
+ration of a given intervention is not xed in time, and depends on when it starts.
+Therefore, ∆i,t∈ N denotes the actual duration of intervention i∈ I if it starts at
+time t∈H.
+Resource workload ( rc,t
+i,t′ ) Every intervention requires specic skills to be cor-
+rectly carried out. Consequently there is a resource workload which depends on the
+considered resource but also on time. This is because the duration of an interven-
+tion depends on time, but also because more resources are generally needed at the
+beginning and the end of the intervention for specic purposes (bringing and remov-
+ing equipment, nishing touches). Therefore, the workload requiered for resource
+c∈C at time t∈H by intervention i∈I if i begins at time t
+′
+∈H is denoted by
+rc,t
+i,t′∈ R+.
+3
+2.4 Risk
+When an intervention is being performed, the considered lines have to be discon-
+nected, causing the electricity network to be weakened at this time. This implies a
+certain risk for RTE, which is highly linked to the grid operation: if another close
+site is to break down (due to extreme weather for example), the network may not be
+able to handle correctly the electricity demand. Even if such events have an extreme
+low probability to occur, they have to be taken into account in the schedule. In order
+to nancially quantify these risks, RTE already conducted simulations for dierent
+scenarios for dierent time steps. Let St be the set of scenarios at time t∈H. They
+correspond to a certain grid operation, and therefore do not depend on interventions.
+Risk ( risks,t
+i,t′ ) The risk value itself, however, depends on the considered interven-
+tion. It also depends on time, as it is often much less risky to perform interventions
+in summer (when the electricity network is not much solicited) rather than in winter.
+So the risk value (in euros) is denoted by risks,t
+i,t′∈ R for time period t∈H, scenario
+s∈St and intervention i∈I when i starts at time t
+′
+∈H.
+3 Solution
+A schedule (or solution) is a list L of pairs (i,t )∈ I×H, where t is the starting
+time of intervention i. Let starti denotes the starting time of intervention i∈ I,
+and It⊆I the set of interventions in process at time t∈H.
+A planning is said feasible if additionally all constraints presented below hold.
+4
+4 Constraints
+4.1 Schedule constraints
+4.1.1 Non-preemptive scheduling
+Interventions have to start at the beginning of a period. Moreover, as interventions
+require to shut down some lines of the electricity network, once an intervention
+starts, it cannot be interrupted (except for the non-worked days). More precisely, if
+intervention i∈I starts at time t∈H, then it has to end at t + ∆i,t.
+4.1.2 Interventions are scheduled once
+All interventions have to be executed.
+4.1.3 No work left
+All interventions must be completed no later than the end of the horizon. If inter-
+vention i∈ I starts at time t∈ H, then t + ∆i,t≤ T + 1. In Figure 2, I2 is not
+correctly scheduled.
+Figure 2: Example of an intervention terminating before the end of the horizon ( I1) and after ( I2)
+when T = 365
+4.2 Resource constraints
+Given a solution, the workload due to intervention i for resource c at time t is rc,t
+i,starti.
+Then the total resource workload for c at time t is rc,t = ∑
+i∈It
+rc,t
+i,starti.
+The needed resources cannot exceed the resources capacity but have to be at
+least equal to the minimum workload, and hence the resource constraints are:
+lc
+t≤rtot(c,t )≤uc
+t ∀c∈C,t∈H (1)
+4.3 Disjonctive constraints
+Some lines where maintenance operations have to be performed are sometimes too
+close to each other to carry out the corresponding interventions at the same time.
+This would weaken the network too much, and would be dramatic in case another
+close line is disconnected during the interventions. While the risk values are com-
+puted independently for each intervention, exclusions take into account dependencies
+between them. Moreover, these exclusions also vary in time. For instance in summer,
+5
+it is much less risky to weaken the network because the overall demand is much less
+than in winter, and so the network can handle the disconnection of another close line.
+The set of exclusions is denoted by Exc. It is a set of triplets (i1,i 2,t ) where
+i1,i 2∈I and t∈H. The exclusion constraints can formally be written as:
+i1∈It⇒i2 /∈It ∀(i1,i 2,t )∈Exc (2)
+6
+5 Objective
+The score evaluation of a feasible planning only depends on the risk distribution.
+Firstly, only the mean risk was taken into consideration (over time and scenarios).
+In addition of being intuitive, an average risk sums up an entire planning in a sin-
+gle value expressed as a monetary cost. If an arbitration had to be made in a few
+seconds between two plannings, the mean risk would denitely be the indicator to
+look at.
+But if the scheduler had several minutes, he or she would want to know more
+than just an average, and would look at the distribution over the year: is the risk
+higher in summer, when a lot of interventions are generally carried out but the grid
+is less solicited? Or is it in winter, when a few - but risky - interventions have to be
+performed? Then a decision would be made.
+Eventually, if the scheduler had hours, he or she would want to know even more,
+by diving precisely into each period: for this particular week, what is possibly the
+worst scenario? The average one? Is it likely that the nancial costs go higher than
+expected?
+RTE conducted studies driven by the current scheduling methods to nd which
+indicator best represents all these interventions-related nuances. The overall mean
+cost appeared quickly as an excellent candidate, but it was not enough for taking
+into account specic behaviours of the risk distribution. In the end, RTE found
+another indicator, when in combination with the mean cost, is able to capture some
+of the above described job realities.
+Therefore, one can now quantify the quality of a given planning by looking at
+two criteria: the mean cost and the expected excess. Both of them are risk-related
+and are quantied in euros.
+As mentioned before, the rst one is simply the mean risk over the year. With
+everything else being equal, the goal is to reach the lowest possible value. In addition
+to this rst metric, planning quality is also determined by looking at the expected
+excess. It helps quantifying the cost variability by controlling a certain quantile of
+the distributions.
+5.1 Mean cost
+Given a solution, the cumulative planning risk at t∈ H for a scenario s∈ St, de-
+noted by risks,t, is the sum of risk in scenario s over the in-process interventions at
+t : risks,t = ∑
+i∈It
+risks,t
+i,starti. This is a rst order approximation, as the risk values are
+assumed to be independent.
+The mean cumulative planning risk at t∈H is riskt = 1
+|St|
+∑
+s∈St
+risks,t.
+Then the overall planning risk (or mean cost) is
+obj1 = 1
+T
+∑
+t∈H
+riskt (3)
+The mean cost is then an average in two ways: regarding the scenarios and
+regarding the time horizon.
+7
+5.2 Expected excess
+As mentioned before, the planning quality also takes into account the cost variability.
+Indeed, by computing the mean risk over all scenarios, some information is lost. In
+particular, critical scenarios inducing extremely high costs may not be captured
+enough by the mean. To prevent this kind of events from happening, a metric exists
+to quantify the variability of the scenarios.
+5.2.1 Reminder
+Let E⊂ R be a non-empty nite set and τ∈]0, 1]. The τ quantile of E, denoted
+Qτ(E) is:
+Qτ(E) =min{q∈ R :∃X⊆E :|X|≥ τ×|E| and ∀x∈X,x≤q} (4)
+5.2.2 Denition
+The expected excess indicator relies on the τ quantile values. For every time period
+t, we dene the quantile value Qt
+τ as follow :
+Qt
+τ =Qτ({risks,t}s∈St) (5)
+The expected excess at time t∈H is then dened as:
+Excessτ(t) = max(0,Qt
+τ−riskt) (6)
+Figures 3 and 4 show an illustration of the variability cost for τ = 0.9. Let I1,
+I2 and I3 be three interventions planned at time t = 1. Their individual risk values
+over 10 scenarios are as follows:
+Figure 3: Risk values for 10 scenarios
+Then one may compute the mean risk, the Q0.9 quantile and then the expected
+excess.
+8
+Figure 4: Sum of risk values for 10 scenarios
+The expected excess of a planning is:
+obj2(τ) = 1
+T
+∑
+t∈H
+Excessτ(t) (7)
+5.3 Planning ranking
+The two metrics described above are in euros. However, they cannot necessarily be
+compared directly, as they depend on risk aversion (or risk policies). That is why a
+scaling factor α∈ [0, 1] is needed. Then the nal score of a planning is :
+obj(τ) =α×obj1 + (1−α)×obj2(τ) (8)
+The goal is to nd a feasible planning with the lowest possible score regarding
+this objective.
+9

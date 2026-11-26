@@ -1,0 +1,21 @@
+{
+  "stack_threshold": 20,
+  "many_stacks": [
+    "MBA* c 0 f 1.33",
+    "MBA* c 0 f 1.8",
+    "MBA* c 0 f 2.0",
+    "MBA* c 1 f 1.5",
+    "MBA* c 1 f 3.0",
+    "MBA* c 0 f 1.75",
+    "MBA* c 1 f 1.75"
+  ],
+  "few_stacks": [
+    "MBA* c 0 f 1.33",
+    "MBA* c 0 f 1.5",
+    "MBA* c 0 f 2.0",
+    "MBA* c 1 f 1.5",
+    "MBA* c 1 f 3.0",
+    "MBA* c 0 f 1.75",
+    "MBA* c 1 f 1.75"
+  ]
+}

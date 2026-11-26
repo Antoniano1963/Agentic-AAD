@@ -1,0 +1,16 @@
+Improve the supplied original iterated-greedy solver for standard permutation
+flow-shop makespan minimization. You may modify the entire solver, including
+initialization, destruction, reconstruction, local search, and acceptance.
+Preserve its command-line interface: --instance --output --time-limit --seed.
+Output JSON with permutation (all zero-based job IDs exactly once) and makespan.
+Respect the supplied wall-time allowance and use one CPU thread per solve.
+The development set has 60 instances: n=100/200 and m=20/40/60, ten repeats
+per instance, 0.03*n*m seconds per solve. Evaluation independently checks the
+permutation and recomputes makespan. Minimize equal-weight mean gap relative
+to fixed reference upper bounds (negative gaps are valid). combined_score is
+negative mean gap for fully valid candidates; invalid candidates receive -1e12.
+Never alter evaluator files, read other agents' files or test instances,
+hard-code instance-specific solutions, or access network or API credentials.
+All evaluation calls, including the initial program and failed candidates,
+count toward the externally configured attempt budget. Use feedback from the
+evaluator; do not launch additional benchmark searches yourself.

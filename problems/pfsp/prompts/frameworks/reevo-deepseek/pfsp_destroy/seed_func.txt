@@ -1,0 +1,7 @@
+def destroy_v1(sequence: list, processing_times: list) -> tuple[list, list]:
+    import random
+    positions=sorted(random.sample(range(len(sequence)),min(2,len(sequence))),reverse=True)
+    removed=[sequence[p] for p in positions]
+    remaining=sequence.copy()
+    for p in positions:remaining.pop(p)
+    return remaining,removed

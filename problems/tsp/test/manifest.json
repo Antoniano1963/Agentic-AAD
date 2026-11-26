@@ -1,0 +1,149 @@
+[
+  {
+    "instance": "bm33708",
+    "n": 33708,
+    "path": "data/bm33708.tsp",
+    "sha256": "2901a5f06747b2ed7f7e1e56289832c10affa157ebb46f0902b14858c17cde03",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "fht47608",
+    "n": 47608,
+    "path": "data/fht47608.tsp",
+    "sha256": "2a88ae1a2199eb419c21522054852fe54ea8f08310292d0d8402e6a586585576",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "ics39603",
+    "n": 39603,
+    "path": "data/ics39603.tsp",
+    "sha256": "f9257c4e0ffbd3a2e362bf1c75606fdb0931096000be6e0bf174ebe3eba728c2",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "icx28698",
+    "n": 28698,
+    "path": "data/icx28698.tsp",
+    "sha256": "876ebfad3bdbf6e4225e0b29da99ca62ea9013c901f9d9a568a07b3e3b7b9d2b",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "pba38478",
+    "n": 38478,
+    "path": "data/pba38478.tsp",
+    "sha256": "49cdf413e58c15d120262e8594a9ca112606c685f4e4e67aa73e52a94ebf04b0",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "vm22775",
+    "n": 22775,
+    "path": "data/vm22775.tsp",
+    "sha256": "e63dbdbe44bdb8b207dfa2d3cc9a1347f456513155b2b0ec4daf5af6c9d3f6d2",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "xib32892",
+    "n": 32892,
+    "path": "data/xib32892.tsp",
+    "sha256": "6a46b9cfa6c348de85ca85ccdd5980aed0c0982f161fec56eb91005b261b1f64",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "bby34656",
+    "n": 34656,
+    "path": "data/bby34656.tsp",
+    "sha256": "aa014b4948b4b5c98b56fbed3226c534c7ad7e34256cb2a84259e1c4a023da3f",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "bbz25234",
+    "n": 25234,
+    "path": "data/bbz25234.tsp",
+    "sha256": "a20c94ced635ca1287e1cff3955ac46f2dbe2d0622d3eb4a89e2fb910f6b24d7",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "boa28924",
+    "n": 28924,
+    "path": "data/boa28924.tsp",
+    "sha256": "38468ef0e8ab08de261e9301f6dfdb3e7e76f6b43d122ee74c945d50a92664cd",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "fma21553",
+    "n": 21553,
+    "path": "data/fma21553.tsp",
+    "sha256": "f6da0603fb46a30866de2a69c8564eebcf53d3e0808f91557be5ba440f3a35e7",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "fry33203",
+    "n": 33203,
+    "path": "data/fry33203.tsp",
+    "sha256": "07b50dcdb86fd3594ed556d8f723c66da8b8bea50d76fd16030bc575e00a84a8",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "fyg28534",
+    "n": 28534,
+    "path": "data/fyg28534.tsp",
+    "sha256": "3de8b46a664db01e0ba46ec337990f6cf9f6b625a115c6e34452e8bf6948780f",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "ido21215",
+    "n": 21215,
+    "path": "data/ido21215.tsp",
+    "sha256": "8c80475038f647638f4c781cc4d25d0e4739f5b0f0b1c5ddb912c8fe99aec154",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "ird29514",
+    "n": 29514,
+    "path": "data/ird29514.tsp",
+    "sha256": "f910a64d0487b0edddf6720e84bae5314227ceedf226973211f78f912df86281",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "irx28268",
+    "n": 28268,
+    "path": "data/irx28268.tsp",
+    "sha256": "f8d52c8ed5820f75a36b3547cc2b8d604568fc4f15c0a57b726a6d384cd20f9b",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "lsb22777",
+    "n": 22777,
+    "path": "data/lsb22777.tsp",
+    "sha256": "4f816169bf021529d6b24403177b4fe9a68d8e9c38caa15c3d37a66517ce945a",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "pbh30440",
+    "n": 30440,
+    "path": "data/pbh30440.tsp",
+    "sha256": "cb937c814e7bd070892d71ddf044861196aed2244154ba752eb94546d14db43c",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "rbz43748",
+    "n": 43748,
+    "path": "data/rbz43748.tsp",
+    "sha256": "653e5a7155879b141d9744bd4c4f95832c1bdb5f9af733de57370e1202c4e667",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "sw24978",
+    "n": 24978,
+    "path": "data/sw24978.tsp",
+    "sha256": "f26efc8c3b8e4f5b60a5c77160d876bd3561aa43b0325a56d8d856dfe7e4a213",
+    "budget_seconds": 3600
+  },
+  {
+    "instance": "xrh24104",
+    "n": 24104,
+    "path": "data/xrh24104.tsp",
+    "sha256": "6d98c9711c4175a81c29f10be2a09925cff0d7a6fd95ad5bf009bf313f013a07",
+    "budget_seconds": 3600
+  }
+]

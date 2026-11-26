@@ -1,0 +1,1 @@
+Fixed IG loop: NEH initialization; insertion local search; repeat destruction, greedy best-position reinsertion, insertion local search, Metropolis acceptance. Temperature factor is 0.4. Only the destruction function is evolved. This is single-operator upstream ReEvo, not SCOE or an operator ensemble. Seek lower training mean gap under the fixed runtime budget.
